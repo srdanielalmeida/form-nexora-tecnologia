@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexora - Qualificação</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #050505;
+            /* Deep Dark mode background */
+            color: #FFFFFF;
+        }
+
+        /* Glassmorphism utility */
+        .glass {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .glass-gradient-border {
+            position: relative;
+        }
+
+        .glass-gradient-border::before {
+            content: "";
+            position: absolute;
+            inset: -1px;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.01));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        /* Animations */
+        .step-enter {
+            animation: fadeInSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .step-exit {
+            animation: fadeOutSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes fadeInSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(15px) scale(0.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes fadeOutSlideUp {
+            from {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateY(-15px) scale(0.98);
+            }
+        }
+
+        /* Custom Radio Button Styles */
+        .option-card {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .option-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .option-card.selected {
+            background: rgba(8, 145, 178, 0.15);
+            /* Cyan accent */
+            border-color: #06b6d4;
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.15);
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center p-4 relative z-0">
+
+    <!-- Decorative background elements -->
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <div class="absolute inset-0 opacity-[0.03]"
+            style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E');">
+        </div>
+        <div class="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-900/10 blur-[120px]"></div>
+        <div class="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-cyan-900/10 blur-[120px]"></div>
+    </div>
+
+    <main class="w-full max-w-xl">
+        <!-- Form Container -->
+        <div class="glass glass-gradient-border rounded-[2rem] p-6 sm:p-10 relative overflow-hidden shadow-2xl">
+
+            <!-- Logo -->
+            <div class="flex justify-center mb-10 mt-2">
+                <img src="./Nexora.png" alt="Nexora Tecnologia" class="h-8 sm:h-10 object-contain drop-shadow-lg">
+            </div>
+
+            <!-- Progress Bar -->
+            <div id="progress-container" class="w-full bg-white/5 rounded-full h-1.5 mb-6 hidden overflow-hidden">
+                <div id="progress-bar"
+                    class="bg-gradient-to-r from-blue-500 to-cyan-400 h-full rounded-full transition-all duration-700 ease-out shadow-[0_0_10px_rgba(6,182,212,0.5)]"
+                    style="width: 0%"></div>
+            </div>
+
+            <!-- Header Info (Back button & Step counter) -->
+            <div id="form-header"></div>
+
+            <!-- Steps Container -->
+            <div id="form-steps-container" class="relative min-h-[280px] flex items-center">
+                <!-- Content injected via JS -->
+            </div>
+
+        </div>
+
+        <!-- Footer info -->
+        <div class="text-center mt-6 text-gray-500 text-xs flex justify-center items-center gap-1 opacity-70">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
+                </path>
+            </svg>
+            Seus dados estão protegidos por criptografia de ponta a ponta.
+        </div>
+    </main>
+
+    <script>
+        const questions = [
+            {
+                id: 'faturamento',
+                question: 'Qual o seu faturamento mensal médio?',
+                options: [
+                    { label: 'Menos de R$ 10k', value: 'Menos de R$ 10k', disqualify: true },
+                    { label: 'R$ 10k a R$ 50k', value: 'R$ 10k a R$ 50k', disqualify: false },
+                    { label: 'Acima de R$ 50k', value: 'Acima de R$ 50k', disqualify: false }
+                ]
+            },
+            {
+                id: 'gargalo',
+                question: 'Qual o principal gargalo da sua operação hoje?',
+                options: [
+                    { label: 'Vendas', value: 'Vendas', disqualify: false },
+                    { label: 'Atendimento', value: 'Atendimento', disqualify: false },
+                    { label: 'Tecnologia', value: 'Tecnologia', disqualify: false }
+                ]
+            },
+            {
+                id: 'estrutura',
+                question: 'Você já possui uma estrutura de e-commerce ou está começando do zero?',
+                options: [
+                    { label: 'Começando do zero', value: 'Começando do zero', disqualify: false },
+                    { label: 'Já tenho operação/loja', value: 'Já tenho operação/loja', disqualify: false }
+                ]
+            },
+            {
+                id: 'investimento',
+                question: 'Quanto você pretende investir em anúncios para tracionar sua nova loja?',
+                options: [
+                    { label: 'Abaixo de R$ 2k/mês', value: 'Abaixo de R$ 2k/mês', disqualify: true },
+                    { label: 'R$ 2k a R$ 10k/mês', value: 'R$ 2k a R$ 10k/mês', disqualify: false },
+                    { label: 'Acima de R$ 10k/mês', value: 'Acima de R$ 10k/mês', disqualify: false }
+                ]
+            }
+        ];
+
+        let currentStep = 0;
+        const answers = {};
+        let isDisqualified = false;
+
+        const container = document.getElementById('form-steps-container');
+        const progressContainer = document.getElementById('progress-container');
+        const progressBar = document.getElementById('progress-bar');
+        const headerContainer = document.getElementById('form-header');
+
+        function renderStep(stepIndex) {
+            // Unbind previous keyboard listeners
+            document.onkeydown = null;
+
+            if (stepIndex < questions.length) {
+                progressContainer.classList.remove('hidden');
+                const progress = ((stepIndex) / questions.length) * 100;
+                progressBar.style.width = `${progress}%`;
+
+                // Render Header elements
+                headerContainer.innerHTML = `
+                    <div class="flex justify-between items-center mb-6 text-sm font-medium step-enter">
+                        ${stepIndex > 0 ?
+                        `<button onclick="goBack()" class="text-gray-400 hover:text-white transition flex items-center gap-1.5 group px-2 py-1 -ml-2 rounded-lg hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-white/20">
+                                <svg class="w-4 h-4 transform group-hover:-translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg> Voltar
+                            </button>`
+                        : '<div></div>'}
+                        <span class="text-cyan-300 text-xs font-semibold uppercase tracking-wider bg-cyan-900/30 px-3 py-1 rounded-full border border-cyan-500/20 shadow-[0_0_10px_rgba(6,182,212,0.1)]">Passo ${stepIndex + 1} de ${questions.length}</span>
+                    </div>
+                `;
+            } else {
+                progressBar.style.width = `100%`;
+                headerContainer.innerHTML = '';
+            }
+
+            const currentElement = container.firstElementChild;
+            if (currentElement) {
+                currentElement.classList.remove('step-enter');
+                currentElement.classList.add('step-exit');
+
+                setTimeout(() => {
+                    container.innerHTML = '';
+                    buildStepHTML(stepIndex);
+                }, 300);
+            } else {
+                buildStepHTML(stepIndex);
+            }
+        }
+
+        function goBack() {
+            if (currentStep > 0) {
+                currentStep--;
+                renderStep(currentStep);
+            }
+        }
+
+        function buildStepHTML(stepIndex) {
+            const stepDiv = document.createElement('div');
+            stepDiv.className = 'step-enter w-full';
+
+            if (stepIndex < questions.length) {
+                const q = questions[stepIndex];
+
+                const title = document.createElement('h2');
+                title.className = 'text-xl sm:text-2xl font-semibold mb-6 text-white leading-tight tracking-tight';
+                title.innerText = q.question;
+                stepDiv.appendChild(title);
+
+                const optionsContainer = document.createElement('div');
+                optionsContainer.className = 'flex flex-col gap-3';
+
+                q.options.forEach((opt, idx) => {
+                    const btn = document.createElement('button');
+                    const isSelected = answers[q.id] === opt.value;
+
+                    // Support keyboard tab navigation
+                    btn.tabIndex = 0;
+
+                    btn.className = `option-card w-full text-left p-4 sm:p-5 rounded-xl border ${isSelected ? 'border-[#06b6d4] bg-[rgba(8,145,178,0.15)] shadow-[0_0_20px_rgba(6,182,212,0.15)] selected' : 'border-white/5 bg-white/5'} text-gray-200 font-medium focus:outline-none focus:ring-2 focus:ring-cyan-500/50 flex items-center justify-between group`;
+
+                    btn.innerHTML = `
+                        <div class="flex items-center gap-3.5">
+                            <div class="hidden sm:flex w-6 h-6 rounded bg-black/40 border ${isSelected ? 'border-cyan-500/50 text-cyan-400' : 'border-white/10 text-gray-400 group-hover:bg-white/10'} items-center justify-center text-xs transition font-mono shadow-inner">${idx + 1}</div>
+                            <span class="text-sm sm:text-base leading-snug">${opt.label}</span>
+                        </div>
+                        <div class="flex-shrink-0 ml-4 w-5 h-5 rounded-full border ${isSelected ? 'border-gray-400' : 'border-gray-600'} group-hover:border-gray-400 flex items-center justify-center transition-colors">
+                            <div class="w-2.5 h-2.5 rounded-full bg-cyan-400 ${isSelected ? 'opacity-100 scale-100' : 'opacity-0 scale-50'} transition-all duration-300"></div>
+                        </div>
+                    `;
+
+                    btn.onclick = () => handleSelectOption(q.id, opt, btn);
+                    optionsContainer.appendChild(btn);
+                });
+
+                stepDiv.appendChild(optionsContainer);
+
+                // Add text helper for keyboard navigation on Desktop
+                const hint = document.createElement('div');
+                hint.className = 'hidden sm:block text-center mt-6 text-gray-500 text-xs';
+                hint.innerHTML = 'Dica: Use os números <kbd class="font-mono bg-white/10 px-1.5 py-0.5 rounded text-gray-400">1</kbd> a <kbd class="font-mono bg-white/10 px-1.5 py-0.5 rounded text-gray-400">${q.options.length}</kbd> para selecionar rapidamente.';
+                stepDiv.appendChild(hint);
+
+                // Keyboard events
+                document.onkeydown = (e) => {
+                    const num = parseInt(e.key);
+                    if (num > 0 && num <= q.options.length) {
+                        const opt = q.options[num - 1];
+                        const btn = optionsContainer.children[num - 1];
+                        handleSelectOption(q.id, opt, btn);
+                    }
+                };
+
+            } else {
+                // Analyzing Screen
+                stepDiv.innerHTML = `
+                    <div class="text-center py-10 flex flex-col items-center justify-center">
+                        <div class="relative w-16 h-16 mb-8">
+                            <div class="absolute inset-0 rounded-full border-t-2 border-cyan-400 animate-[spin_1s_linear_infinite]"></div>
+                            <div class="absolute inset-2 rounded-full border-r-2 border-blue-500 animate-[spin_1.5s_linear_infinite_reverse]"></div>
+                            <div class="absolute inset-4 rounded-full border-b-2 border-white/20 animate-[spin_2s_linear_infinite]"></div>
+                        </div>
+                        <h2 class="text-xl font-medium text-white mb-2 tracking-wide animate-pulse">Analisando seu perfil...</h2>
+                        <p class="text-gray-400 text-sm">Cruzando dados com nossos modelos de escala.</p>
+                    </div>
+                `;
+
+                container.appendChild(stepDiv);
+
+                // Calculate qualification
+                isDisqualified = false;
+                questions.forEach(q => {
+                    const ans = answers[q.id];
+                    const opt = q.options.find(o => o.value === ans);
+                    if (opt && opt.disqualify) {
+                        isDisqualified = true;
+                    }
+                });
+
+                setTimeout(() => {
+                    showFinalResult();
+                }, 2000); // 2 seconds fake delay for "analysis" effect
+                return;
+            }
+
+            container.appendChild(stepDiv);
+        }
+
+        function showFinalResult() {
+            setTimeout(() => {
+                progressContainer.classList.add('hidden');
+            }, 300);
+
+            const currentElement = container.firstElementChild;
+            if (currentElement) {
+                currentElement.classList.remove('step-enter');
+                currentElement.classList.add('step-exit');
+                setTimeout(() => {
+                    container.innerHTML = '';
+                    buildFinalResultHTML();
+                }, 300);
+            } else {
+                buildFinalResultHTML();
+            }
+        }
+
+        function buildFinalResultHTML() {
+            const stepDiv = document.createElement('div');
+            stepDiv.className = 'step-enter w-full';
+
+            if (isDisqualified) {
+                stepDiv.innerHTML = `
+                    <div class="text-center py-8">
+                        <div class="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6 border border-white/10">
+                            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <h2 class="text-2xl font-semibold mb-4 text-white tracking-tight">Obrigado pelo envio.</h2>
+                        <p class="text-gray-400 text-sm sm:text-base leading-relaxed max-w-md mx-auto mb-8">
+                            No momento, nossas soluções são voltadas para operações em estágio avançado de escala. 
+                            Continue acompanhando nossos conteúdos para estruturar o seu negócio e chegar lá!
+                        </p>
+                        <a href="https://nexoratecnologia.com/" target="_blank" class="inline-flex items-center text-sm font-medium text-cyan-400 hover:text-cyan-300 transition-colors">
+                            Conhecer mais sobre a Nexora <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </a>
+                    </div>
+                `;
+            } else {
+                const waText = encodeURIComponent(`Olá, Nexora. Concluí a qualificação.\nFaturamento: ${answers['faturamento']}\nGargalo: ${answers['gargalo']}\nInvestimento: ${answers['investimento']}`);
+                const waLink = `https://wa.me/559420180580?text=${waText}`;
+
+                stepDiv.innerHTML = `
+                    <div class="text-center py-6">
+                        <div class="w-20 h-20 bg-gradient-to-tr from-cyan-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_30px_rgba(6,182,212,0.4)] relative">
+                            <div class="absolute inset-0 rounded-full bg-cyan-400 blur-md opacity-30 animate-pulse"></div>
+                            <svg class="w-10 h-10 text-white relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-bold mb-3 text-white tracking-tight">Excelente!</h2>
+                        <p class="text-gray-300 mb-8 text-sm sm:text-base leading-relaxed">
+                            Sua operação tem o perfil ideal para nossas soluções. Vamos conversar para traçar a melhor estratégia de escala.
+                        </p>
+                        <a href="${waLink}" target="_blank" class="inline-flex items-center justify-center w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold py-4 px-8 rounded-xl transition-all transform hover:-translate-y-1 shadow-[0_10px_20px_rgba(6,182,212,0.2)] focus:ring-4 focus:ring-cyan-500/30">
+                            <span>Iniciar Consultoria no WhatsApp</span>
+                            <svg class="w-5 h-5 ml-2 -mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+                `;
+            }
+            container.appendChild(stepDiv);
+        }
+
+        function handleSelectOption(questionId, option, btnElement) {
+            // Unbind keyboard to prevent double clicks during animation
+            document.onkeydown = null;
+
+            // Visual feedback
+            const allBtns = btnElement.parentElement.children;
+            for (let btn of allBtns) {
+                btn.classList.remove('selected', 'border-[#06b6d4]', 'bg-[rgba(8,145,178,0.15)]');
+                btn.classList.add('border-white/5', 'bg-white/5');
+                const radioCircleOuter = btn.querySelector('.flex-shrink-0');
+                if (radioCircleOuter) radioCircleOuter.classList.replace('border-gray-400', 'border-gray-600');
+                const radioCircleInner = btn.querySelector('.bg-cyan-400');
+                if (radioCircleInner) {
+                    radioCircleInner.classList.remove('opacity-100', 'scale-100');
+                    radioCircleInner.classList.add('opacity-0', 'scale-50');
+                }
+            }
+
+            btnElement.classList.add('selected', 'border-[#06b6d4]', 'bg-[rgba(8,145,178,0.15)]');
+            btnElement.classList.remove('border-white/5', 'bg-white/5');
+            const radioCircleOuter = btnElement.querySelector('.flex-shrink-0');
+            if (radioCircleOuter) radioCircleOuter.classList.replace('border-gray-600', 'border-gray-400');
+            const radioCircleInner = btnElement.querySelector('.bg-cyan-400');
+            if (radioCircleInner) {
+                radioCircleInner.classList.remove('opacity-0', 'scale-50');
+                radioCircleInner.classList.add('opacity-100', 'scale-100');
+            }
+
+            // Save answer
+            answers[questionId] = option.value;
+
+            // Wait a moment before next step for better UX
+            setTimeout(() => {
+                currentStep++;
+                renderStep(currentStep);
+            }, 350);
+        }
+
+        // Initialize
+        renderStep(0);
+    </script>
+</body>
+
+</html>
