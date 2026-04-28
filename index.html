@@ -92,6 +92,23 @@
             box-shadow: 0 0 20px rgba(6, 182, 212, 0.15);
         }
     </style>
+    <!-- Meta Pixel Code -->
+    <script>
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '1939959009973929');
+        fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1939959009973929&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
 </head>
 
 <body class="min-h-screen flex items-center justify-center p-4 relative z-0">
@@ -145,38 +162,30 @@
     <script>
         const questions = [
             {
-                id: 'faturamento',
-                question: 'Qual o seu faturamento mensal médio?',
+                id: 'presenca_online',
+                question: 'Seu negócio já tem presença online?',
                 options: [
-                    { label: 'Menos de R$ 10k', value: 'Menos de R$ 10k', disqualify: true },
-                    { label: 'R$ 10k a R$ 50k', value: 'R$ 10k a R$ 50k', disqualify: false },
-                    { label: 'Acima de R$ 50k', value: 'Acima de R$ 50k', disqualify: false }
+                    { label: 'Tenho site e redes ativas', value: 'Tenho site e redes ativas' },
+                    { label: 'Tenho só redes sociais', value: 'Tenho só redes sociais' },
+                    { label: 'Ainda não tenho nada', value: 'Ainda não tenho nada' }
                 ]
             },
             {
-                id: 'gargalo',
-                question: 'Qual o principal gargalo da sua operação hoje?',
+                id: 'investimento_anuncios',
+                question: 'Você já investe em anúncios pagos hoje?',
                 options: [
-                    { label: 'Vendas', value: 'Vendas', disqualify: false },
-                    { label: 'Atendimento', value: 'Atendimento', disqualify: false },
-                    { label: 'Tecnologia', value: 'Tecnologia', disqualify: false }
+                    { label: 'Sim, mas não tô satisfeito com os resultados', value: 'Sim, mas não tô satisfeito com os resultados' },
+                    { label: 'Nunca investi mas quero começar', value: 'Nunca investi mas quero começar' },
+                    { label: 'Não tenho interesse em anúncios pagos', value: 'Não tenho interesse em anúncios pagos' }
                 ]
             },
             {
-                id: 'estrutura',
-                question: 'Você já possui uma estrutura de e-commerce ou está começando do zero?',
+                id: 'orcamento_disponivel',
+                question: 'Para crescer no digital, você está disposto a investir a partir de R$ 2.000?',
                 options: [
-                    { label: 'Começando do zero', value: 'Começando do zero', disqualify: false },
-                    { label: 'Já tenho operação/loja', value: 'Já tenho operação/loja', disqualify: false }
-                ]
-            },
-            {
-                id: 'investimento',
-                question: 'Quanto você pretende investir em anúncios para tracionar sua nova loja?',
-                options: [
-                    { label: 'Abaixo de R$ 2k/mês', value: 'Abaixo de R$ 2k/mês', disqualify: true },
-                    { label: 'R$ 2k a R$ 10k/mês', value: 'R$ 2k a R$ 10k/mês', disqualify: false },
-                    { label: 'Acima de R$ 10k/mês', value: 'Acima de R$ 10k/mês', disqualify: false }
+                    { label: 'Sim, entendo que resultado bom exige investimento', value: 'Sim' },
+                    { label: 'Talvez, depende do que está incluído', value: 'Talvez' },
+                    { label: 'Não tenho esse orçamento agora', value: 'Não tenho esse orçamento agora', disqualify: true }
                 ]
             }
         ];
@@ -366,7 +375,7 @@
                     </div>
                 `;
             } else {
-                const waText = encodeURIComponent(`Olá, Nexora. Concluí a qualificação.\nFaturamento: ${answers['faturamento']}\nGargalo: ${answers['gargalo']}\nInvestimento: ${answers['investimento']}`);
+                const waText = encodeURIComponent(`Olá, Nexora. Concluí a qualificação.\n\nPresença online: ${answers['presenca_online']}\nInveste em anúncios: ${answers['investimento_anuncios']}\nDisposto a investir: ${answers['orcamento_disponivel']}`);
                 const waLink = `https://wa.me/559420180580?text=${waText}`;
 
                 stepDiv.innerHTML = `
@@ -379,7 +388,7 @@
                         <p class="text-gray-300 mb-8 text-sm sm:text-base leading-relaxed">
                             Sua operação tem o perfil ideal para nossas soluções. Vamos conversar para traçar a melhor estratégia de escala.
                         </p>
-                        <a href="${waLink}" target="_blank" class="inline-flex items-center justify-center w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold py-4 px-8 rounded-xl transition-all transform hover:-translate-y-1 shadow-[0_10px_20px_rgba(6,182,212,0.2)] focus:ring-4 focus:ring-cyan-500/30">
+                        <a href="${waLink}" target="_blank" onclick="fbq('track', 'Lead');" class="inline-flex items-center justify-center w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold py-4 px-8 rounded-xl transition-all transform hover:-translate-y-1 shadow-[0_10px_20px_rgba(6,182,212,0.2)] focus:ring-4 focus:ring-cyan-500/30">
                             <span>Iniciar Consultoria no WhatsApp</span>
                             <svg class="w-5 h-5 ml-2 -mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                         </a>
