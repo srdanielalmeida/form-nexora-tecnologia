@@ -102,11 +102,11 @@
         t.src=v;s=b.getElementsByTagName(e)[0];
         s.parentNode.insertBefore(t,s)}(window, document,'script',
         'https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', '1939959009973929');
+        fbq('init', '1518701493022426');
         fbq('track', 'PageView');
     </script>
     <noscript><img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=1939959009973929&ev=PageView&noscript=1"
+    src="https://www.facebook.com/tr?id=1518701493022426&ev=PageView&noscript=1"
     /></noscript>
     <!-- End Meta Pixel Code -->
 </head>
@@ -388,14 +388,30 @@
                         <p class="text-gray-300 mb-8 text-sm sm:text-base leading-relaxed">
                             Sua operação tem o perfil ideal para nossas soluções. Vamos conversar para traçar a melhor estratégia de escala.
                         </p>
-                        <a href="${waLink}" target="_blank" onclick="fbq('track', 'Lead');" class="inline-flex items-center justify-center w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold py-4 px-8 rounded-xl transition-all transform hover:-translate-y-1 shadow-[0_10px_20px_rgba(6,182,212,0.2)] focus:ring-4 focus:ring-cyan-500/30">
+                        <button onclick="trackLeadAndWhatsApp('${waLink}')" class="inline-flex items-center justify-center w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold py-4 px-8 rounded-xl transition-all transform hover:-translate-y-1 shadow-[0_10px_20px_rgba(6,182,212,0.2)] focus:ring-4 focus:ring-cyan-500/30">
                             <span>Iniciar Consultoria no WhatsApp</span>
                             <svg class="w-5 h-5 ml-2 -mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                        </a>
+                        </button>
                     </div>
                 `;
             }
             container.appendChild(stepDiv);
+        }
+
+        function trackLeadAndWhatsApp(url) {
+            console.log("Tentando disparar evento Lead...");
+            if (typeof fbq !== 'undefined') {
+                fbq('track', 'Lead');
+                console.log("Evento Lead enviado com sucesso!");
+            } else {
+                console.error("Erro: O script do Facebook Pixel não foi carregado corretamente ou está sendo bloqueado.");
+                alert("Atenção: O rastreamento foi bloqueado pelo seu navegador (AdBlock ou modo Incógnito). Para fins de teste, desative o bloqueador.");
+            }
+            
+            // Pequeno atraso para garantir que o Pixel processe antes de abrir a nova aba
+            setTimeout(() => {
+                window.open(url, '_blank');
+            }, 100);
         }
 
         function handleSelectOption(questionId, option, btnElement) {
